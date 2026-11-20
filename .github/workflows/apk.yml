@@ -1,0 +1,51 @@
+name: APK olustur
+on:
+  push:
+    paths:
+      - 'main.dart'
+      - 'pubspec.yaml'
+      - 'icons/**'
+      - '.github/workflows/apk.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: zulu
+          java-version: '17'
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - name: Sabit imza anahtari
+        run: |
+          mkdir -p ~/.android
+          cp debug.keystore ~/.android/debug.keystore
+      - name: Dosyalari yerlestir
+        run: |
+          mkdir -p lib && cp main.dart lib/main.dart
+          flutter create --platforms=android --project-name bist_asistan --org com.bistasistan .
+          sed -i 's#android:label="[^"]*"#android:label="BIST Asistan"#' android/app/src/main/AndroidManifest.xml
+          sed -i 's#<application#<uses-permission android:name="android.permission.INTERNET"/>\n    <application#' android/app/src/main/AndroidManifest.xml
+      - name: Uygulama simgesi
+        run: |
+          for d in mdpi hdpi xhdpi xxhdpi xxxhdpi; do
+            cp icons/$d.png android/app/src/main/res/mipmap-$d/ic_launcher.png
+          done
+      - run: flutter pub get
+      - run: flutter build apk --release
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bist-asistan-apk
+          path: build/app/outputs/flutter-apk/app-release.apk
+      - name: Surum sayfasina yukle
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: son-surum
+          name: Son surum
+          files: build/app/outputs/flutter-apk/app-release.apk
+          make_latest: true

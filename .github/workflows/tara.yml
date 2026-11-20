@@ -1,30 +1,50 @@
 name: BIST tara
 on:
   schedule:
-    - cron: '*/15 7-15 * * 1-5'   # Istanbul 10:00-18:59, hafta ici
+    # Istanbul 09:03 / 09:33 / 10:03; biri tutmazsa digeri baslatir
+    - cron: '3 6 * * 1-5'
+    - cron: '33 6 * * 1-5'
+    - cron: '3 7 * * 1-5'
   workflow_dispatch:
 permissions:
   contents: write
+  actions: write
 concurrency:
   group: bist-tara
   cancel-in-progress: false
 jobs:
   tara:
     runs-on: ubuntu-latest
+    timeout-minutes: 355
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Tara ve sanal al-sat
-        run: python tarayici/calistir.py
-      - name: Sonuclari kaydet
-        if: always()
+      - name: Seans boyunca tara (10 dakikada bir)
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           git config user.name "bist-asistan"
           git config user.email "bist-asistan@users.noreply.github.com"
-          git add veri
-          if git diff --cached --quiet; then echo "degisiklik yok"; exit 0; fi
-          git commit -m "Tarama $(TZ=Europe/Istanbul date +'%Y-%m-%d %H:%M')"
-          git pull --rebase origin main || true
-          git push origin HEAD:main
+          bitis=$(date -u -d "15:05" +%s)     # Istanbul 18:05
+          limit=$(( $(date +%s) + 19800 ))    # 5,5 saat sonra kendini yeniden baslatir
+          tara() {
+            python tarayici/calistir.py || true
+            git add veri
+            if ! git diff --cached --quiet; then
+              git commit -q -m "Tarama $(TZ=Europe/Istanbul date +'%Y-%m-%d %H:%M')"
+              git pull -q --rebase origin main || true
+              git push -q origin HEAD:main || true
+            fi
+          }
+          dondu=0
+          while [ $(date +%s) -lt $bitis ]; do
+            tara; dondu=1
+            if [ $(date +%s) -ge $limit ]; then
+              gh workflow run tara.yml --repo "$GITHUB_REPOSITORY" --ref main || true
+              exit 0
+            fi
+            sleep 600
+          done
+          [ $dondu = 1 ] && tara || echo "Seans bitmis, tarama yapilmadi"
