@@ -1,13 +1,13 @@
 {
- "guncelleme": "2026-11-20 10:44",
+ "guncelleme": "2026-11-20 10:46",
  "seans_acik": true,
  "veri_notu": "Fiyatlar ucretsiz kaynaktan, genelde ~15 dk gecikmeli. Sanal para, gercek islem degil.",
  "taranan": 151,
  "rejim": {
   "ok": false,
-  "endeks": 11148.3,
+  "endeks": 11177.9,
   "sma50": 12165.8,
-  "gunluk_degisim": -2.21,
+  "gunluk_degisim": -1.95,
   "not": "Endeks 50 gunluk ortalamanin altinda: yeni alim yapilmaz"
  },
  "stratejiler": [
@@ -57,8 +57,8 @@
  "tarama": [
   {
    "sembol": "GARAN",
-   "fiyat": 144.4,
-   "gunluk_degisim": -0.89,
+   "fiyat": 144.9,
+   "gunluk_degisim": -0.55,
    "rsi": 58.2,
    "hacim_orani": 0.81,
    "uyan": [
@@ -67,8 +67,8 @@
   },
   {
    "sembol": "TAVHL",
-   "fiyat": 287.25,
-   "gunluk_degisim": -1.29,
+   "fiyat": 288.0,
+   "gunluk_degisim": -1.03,
    "rsi": 54.7,
    "hacim_orani": 0.89,
    "uyan": [
