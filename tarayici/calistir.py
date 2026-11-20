@@ -25,10 +25,16 @@ ENDEKS = "XU100.IS"
 
 
 # ---------------------------------------------------------------- veri
+HATALAR = {}
+
+
 def indir(sembol):
-    url = ("https://query1.finance.yahoo.com/v8/finance/chart/%s?range=1y&interval=1d" % sembol)
-    istek = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
-    for deneme in range(2):
+    for deneme in range(4):
+        host = "query1" if deneme % 2 == 0 else "query2"
+        url = ("https://%s.finance.yahoo.com/v8/finance/chart/%s?range=1y&interval=1d" % (host, sembol))
+        istek = urllib.request.Request(url, headers={
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36",
+            "Accept": "application/json"})
         try:
             with urllib.request.urlopen(istek, timeout=20) as r:
                 d = json.load(r)
@@ -45,8 +51,9 @@ def indir(sembol):
             if len(satirlar) < 60 or not fiyat:
                 return None
             return {"satirlar": satirlar, "fiyat": float(fiyat)}
-        except Exception:
-            time.sleep(1.5)
+        except Exception as e:
+            HATALAR[sembol] = "%s: %s" % (type(e).__name__, e)
+            time.sleep(2 + deneme * 2)
     return None
 
 
@@ -291,7 +298,7 @@ def main(indirici=indir, simdi=None):
     simdi = simdi or datetime.now(TR)
     bugun = simdi.strftime("%Y-%m-%d")
     hisseler = hisseleri_oku()
-    with ThreadPoolExecutor(8) as ex:
+    with ThreadPoolExecutor(3) as ex:
         ham = list(ex.map(indirici, hisseler + [ENDEKS]))
     sozluk = dict(zip(hisseler + [ENDEKS], ham))
     endeks_ham = sozluk.pop(ENDEKS)
@@ -306,7 +313,8 @@ def main(indirici=indir, simdi=None):
     if len(analizler) < 20:
         print("Cok az veri geldi, kaynak calismiyor olabilir. Durum degistirilmedi.")
         yaz("hata.json", {"zaman": simdi.strftime("%Y-%m-%d %H:%M"), "alinan": len(analizler),
-                         "alinamayan": alinamayan[:50]})
+                         "alinamayan": alinamayan[:50],
+                         "hatalar": dict(list(HATALAR.items())[:8])})
         sys.exit(1)
     # piyasa rejimi
     rejim = {"ok": True, "not": "endeks verisi yok, kontrol edilmedi"}
