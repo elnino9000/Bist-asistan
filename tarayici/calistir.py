@@ -299,7 +299,7 @@ def main(indirici=indir, simdi=None):
     bugun = simdi.strftime("%Y-%m-%d")
     hisseler = hisseleri_oku()
     with ThreadPoolExecutor(3) as ex:
-        ham = list(ex.map(indirici, hisseler + [ENDEKS]))
+        ham = list(ex.map(indirici, [h + ".IS" for h in hisseler] + [ENDEKS]))
     sozluk = dict(zip(hisseler + [ENDEKS], ham))
     endeks_ham = sozluk.pop(ENDEKS)
     analizler = {}
