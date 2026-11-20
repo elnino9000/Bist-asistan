@@ -1,0 +1,79 @@
+{
+ "guncelleme": "2026-11-20 10:44",
+ "seans_acik": true,
+ "veri_notu": "Fiyatlar ucretsiz kaynaktan, genelde ~15 dk gecikmeli. Sanal para, gercek islem degil.",
+ "taranan": 151,
+ "rejim": {
+  "ok": false,
+  "endeks": 11148.3,
+  "sma50": 12165.8,
+  "gunluk_degisim": -2.21,
+  "not": "Endeks 50 gunluk ortalamanin altinda: yeni alim yapilmaz"
+ },
+ "stratejiler": [
+  {
+   "ad": "trend",
+   "aciklama": "Yukselen trendi takip eder: fiyat ortalamalarin ustunde, ortalama yukseliyor.",
+   "zarar_kes_yuzde": 6.0,
+   "baslangic": 100000.0,
+   "nakit": 100000.0,
+   "toplam": 100000.0,
+   "kar": 0.0,
+   "kar_yuzde": 0.0,
+   "islem_sayisi": 0,
+   "kazanma_orani": null,
+   "acik": [],
+   "son_islemler": []
+  },
+  {
+   "ad": "geri_donus",
+   "aciklama": "Asiri dusen hissede tepki yukselisi arar: RSI cok dusuk, uzun trend bozulmamis.",
+   "zarar_kes_yuzde": 5.0,
+   "baslangic": 100000.0,
+   "nakit": 100000.0,
+   "toplam": 100000.0,
+   "kar": 0.0,
+   "kar_yuzde": 0.0,
+   "islem_sayisi": 0,
+   "kazanma_orani": null,
+   "acik": [],
+   "son_islemler": []
+  },
+  {
+   "ad": "kirilim",
+   "aciklama": "20 gunluk zirveyi asan hisseyi izler; geri cekilince cikar.",
+   "zarar_kes_yuzde": 5.0,
+   "baslangic": 100000.0,
+   "nakit": 100000.0,
+   "toplam": 100000.0,
+   "kar": 0.0,
+   "kar_yuzde": 0.0,
+   "islem_sayisi": 0,
+   "kazanma_orani": null,
+   "acik": [],
+   "son_islemler": []
+  }
+ ],
+ "tarama": [
+  {
+   "sembol": "GARAN",
+   "fiyat": 144.4,
+   "gunluk_degisim": -0.89,
+   "rsi": 58.2,
+   "hacim_orani": 0.81,
+   "uyan": [
+    "trend"
+   ]
+  },
+  {
+   "sembol": "TAVHL",
+   "fiyat": 287.25,
+   "gunluk_degisim": -1.29,
+   "rsi": 54.7,
+   "hacim_orani": 0.89,
+   "uyan": [
+    "trend"
+   ]
+  }
+ ]
+}

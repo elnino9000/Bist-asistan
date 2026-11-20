@@ -1,0 +1,19 @@
+{
+ "kasalar": {
+  "trend": {
+   "nakit": 100000.0,
+   "pozisyonlar": {},
+   "islemler": []
+  },
+  "geri_donus": {
+   "nakit": 100000.0,
+   "pozisyonlar": {},
+   "islemler": []
+  },
+  "kirilim": {
+   "nakit": 100000.0,
+   "pozisyonlar": {},
+   "islemler": []
+  }
+ }
+}
