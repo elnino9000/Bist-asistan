@@ -117,6 +117,7 @@ class Strateji:
     ad = ""
     aciklama = ""
     zarar_kes = 0.05
+    rejim_gerekli = True  # False: endeks zayifken de alim dener
 
     def giris(self, a):
         """Giris uygunsa puan (>0), degilse None dondurur."""
@@ -148,6 +149,7 @@ class Trend(Strateji):
 
 class GeriDonus(Strateji):
     ad = "geri_donus"
+    rejim_gerekli = False
     aciklama = "Asiri dusen hissede tepki yukselisi arar: RSI cok dusuk, uzun trend bozulmamis."
     zarar_kes = 0.05
 
@@ -237,7 +239,7 @@ def adim(strateji, kasa, analizler, rejim_ok, simdi):
         if neden:
             sat(kasa, s, poz, a["fiyat"], neden, zaman)
     # 2) giris
-    if not (rejim_ok and seans_acik(simdi)):
+    if not ((rejim_ok or not strateji.rejim_gerekli) and seans_acik(simdi)):
         return
     adaylar = []
     for s, a in analizler.items():
