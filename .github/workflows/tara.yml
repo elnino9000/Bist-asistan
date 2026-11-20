@@ -1,0 +1,30 @@
+name: BIST tara
+on:
+  schedule:
+    - cron: '*/15 7-15 * * 1-5'   # Istanbul 10:00-18:59, hafta ici
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: bist-tara
+  cancel-in-progress: false
+jobs:
+  tara:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Tara ve sanal al-sat
+        run: python tarayici/calistir.py
+      - name: Sonuclari kaydet
+        if: always()
+        run: |
+          git config user.name "bist-asistan"
+          git config user.email "bist-asistan@users.noreply.github.com"
+          git add veri
+          if git diff --cached --quiet; then echo "degisiklik yok"; exit 0; fi
+          git commit -m "Tarama $(TZ=Europe/Istanbul date +'%Y-%m-%d %H:%M')"
+          git pull --rebase origin main || true
+          git push origin HEAD:main
