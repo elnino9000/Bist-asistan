@@ -10,3 +10,5 @@ BIST hisselerini tarayan ve **sanal parayla** (gerçek işlem yok) al-sat deneye
 - Endeks 50 günlük ortalamanın altındaysa yeni alım yapılmaz.
 
 Bu bir yatırım tavsiyesi değildir.
+
+APK: Releases > "Son surum" > app-release.apk

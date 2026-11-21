@@ -37,7 +37,7 @@ jobs:
             cp icons/$d.png android/app/src/main/res/mipmap-$d/ic_launcher.png
           done
       - run: flutter pub get
-      - run: flutter build apk --release
+      - run: flutter build apk --release --build-name=1.0.${{ github.run_number }} --build-number=${{ github.run_number }}
       - uses: actions/upload-artifact@v4
         with:
           name: bist-asistan-apk
